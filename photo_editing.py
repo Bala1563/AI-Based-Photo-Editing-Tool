@@ -1,20 +1,10 @@
-#!/usr/bin/env python
-# coding: utf-8
 
-# In[1]:
-
-
-#Adjust Frame
 from tkinter import Toplevel, Label, Scale, Button, HORIZONTAL, RIGHT
 import cv2
 import numpy as np
-
-
 s = 100
 MAX_VALUE = 100
 class AdjustFrame(Toplevel):
-
-
     def __init__(self, master=None):
         Toplevel.__init__(self, master=master)
 
@@ -46,9 +36,6 @@ class AdjustFrame(Toplevel):
         self.cool_label = Label(self, text="Cool")
         self.cool_scale = Scale(self, from_=0, to_=1, length=250, resolution=0.05,
                                   orient=HORIZONTAL)
-
-
-
         self.r_label = Label(self, text="R")
         self.r_scale = Scale(self, from_=-100, to_=100, length=250, resolution=1,
                              orient=HORIZONTAL)
@@ -210,10 +197,7 @@ class AdjustFrame(Toplevel):
         self.destroy()
 
 
-# In[2]:
 
-
-#Filter Frame 
 from tkinter import Toplevel, Button, RIGHT
 import numpy as np
 import cv2
@@ -320,10 +304,6 @@ class FilterFrame(Toplevel):
     # dst_gray, dst_color = cv2.pencilSketch(self.original_image, sigma_s=60, sigma_r=0.07, shade_factor=0.05)
 
     def details(self):
-        # sigma_s controls how much the image is smoothed - the larger its value,
-        # the more smoothed the image gets, but it's also slower to compute.
-        # sigma_r is important if you want to preserve edges while smoothing the image.
-        # Small sigma_r results in only very similar colors to be averaged (i.e. smoothed), while colors that differ much will stay intact.
         kernel_sharpening = np.array([[-1, -1, -1],
                                       [-1, 9, -1],
                                       [-1, -1, -1]])
@@ -358,20 +338,14 @@ class FilterFrame(Toplevel):
     def vignette(self):
         rows, cols = self.original_image.shape[:2]
 
-        # generating vignette mask using Gaussian
-        # resultant_kernels
         X_resultant_kernel = cv2.getGaussianKernel(cols, 200)
         Y_resultant_kernel = cv2.getGaussianKernel(rows, 200)
-
-        # generating resultant_kernel matrix
         resultant_kernel = Y_resultant_kernel * X_resultant_kernel.T
 
-        # creating mask and normalising by using np.linalg
-        # function
+        
         mask = 255 * resultant_kernel / np.linalg.norm(resultant_kernel)
         output = np.copy(self.original_image)
 
-        # applying the mask to each channel in the input image
         for i in range(3):
             output[:, :, i] = output[:, :, i] * mask
         self.filtered_image=output
@@ -491,11 +465,6 @@ class FilterFrame(Toplevel):
     def close(self):
         self.destroy()
 
-
-# In[3]:
-
-
-#Edit bar 
 from tkinter import Frame, Button, LEFT
 from tkinter import filedialog
 #from filterFrame import FilterFrame
@@ -674,12 +643,6 @@ class EditBar(Frame):
 
                 self.master.processed_image = self.master.original_image.copy()
                 self.master.image_viewer.show_image()
-
-
-# In[5]:
-
-
-#back ground color Frame 
 from tkinter import Toplevel, Button, RIGHT
 import numpy as np
 import cv2
@@ -743,10 +706,7 @@ class bgFrame(Toplevel):
         self.destroy()
 
 
-# In[10]:
 
-
-#image viewer
 from tkinter import Frame, Canvas, CENTER, ROUND
 from PIL import Image, ImageTk
 import cv2
@@ -921,11 +881,6 @@ class ImageViewer(Frame):
     def clear_draw(self):
         self.canvas.delete(self.draw_ids)
 
-
-# In[11]:
-
-
-# Main.py
 import tkinter as tk
 from tkinter import ttk
 from tkinter import *
@@ -958,17 +913,7 @@ class Main(tk.Tk):
         separator1.pack(fill=tk.X, padx=20, pady=5)
         self.image_viewer.pack(fill=tk.BOTH, padx=20, pady=10, expand=1)
 
-
-# In[12]:
-
-
-#from main import Main
 root = Main()
 root.mainloop()
-
-
-# In[ ]:
-
-
 
 
